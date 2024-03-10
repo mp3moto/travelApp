@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OpenAPIURLSession
 
 @main
 struct travelAppApp: App {
@@ -14,4 +15,6 @@ struct travelAppApp: App {
             ContentView()
         }
     }
+    
+    
 }
