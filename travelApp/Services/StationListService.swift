@@ -4,6 +4,7 @@ import OpenAPIURLSession
 typealias NearestStations = Components.Schemas.Stations
 typealias ScheduleBetweenStations = Components.Schemas.Search
 typealias ScheduleForStation = Components.Schemas.Schedule
+typealias Thread = Components.Schemas.Thread
 
 protocol NearestStationsServiceProtocol {
     func getNearestStations(lat: Double, lng: Double, distance: Int) async throws -> NearestStations
@@ -15,6 +16,10 @@ protocol ScheduleBetweenStationsServiceProtocol {
 
 protocol ScheduleForStationServiceProtocol {
     func getScheduleForStation(station: String) async throws -> ScheduleForStation
+}
+
+protocol ThreadServiceProtocol {
+    func getThread(uid: String) async throws -> Thread
 }
 
 final class NearestStationsService: NearestStationsServiceProtocol {
@@ -74,3 +79,20 @@ final class ScheduleForStationService: ScheduleForStationServiceProtocol {
     }
 }
 
+final class ThreadService: ThreadServiceProtocol {
+    private let client: Client
+    private let apikey: String
+    
+    init(client: Client, apikey: String) {
+        self.client = client
+        self.apikey = apikey
+    }
+    
+    func getThread(uid: String) async throws -> Thread {
+        let response = try await client.thread(query: .init(
+            apikey: apikey,
+            uid: uid
+        ))
+        return try response.ok.body.json
+    }
+}
