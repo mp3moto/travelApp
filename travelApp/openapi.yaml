@@ -107,6 +107,92 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Search'
+  /v3.0/schedule/:
+    get:
+      tags:
+      - schedule
+      summary: Расписание рейсов по станции
+      operationId: schedule
+      parameters:
+      - name: apikey
+        in: query
+        description: API key
+        required: true
+        schema:
+          type: string
+      - name: station
+        in: query
+        description: Код станции
+        required: true
+        schema:
+          type: string
+      - name: date
+        in: query
+        description: YYYY-MM-DD
+        required: false
+        schema:
+          type: string
+      - name: format
+        in: query
+        description: json или xml
+        required: false
+        schema:
+          type: string
+      - name: lang
+        in: query
+        description: lang
+        required: false
+        schema:
+          type: string
+      - name: transport_types
+        in: query
+        description: Тип транспортного средства
+        required: false
+        schema:
+          type: string
+      - name: direction
+        in: query
+        description: Код направления
+        required: false
+        schema:
+          type: string
+      - name: event
+        in: query
+        description: Событие, для которого нужно отфильтровать нитки в расписании
+        required: false
+        schema:
+          type: string
+      - name: system
+        in: query
+        description: Система кодирования
+        required: false
+        schema:
+          type: string
+      - name: show_systems
+        in: query
+        description: Система кодирования, коды которой следует добавить к описанию станций в результатах поиска
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: Смещение относительно первого результата поиска
+        required: false
+        schema:
+          type: number
+      - name: result_timezone
+        in: query
+        description: Часовой пояс
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Schedule'
   /v3.0/nearest_stations/:
     get:
       tags:
@@ -174,6 +260,35 @@ components:
             $ref: '#/components/schemas/Segments'
         search:
             $ref: '#/components/schemas/SearchDetails'
+    Schedule:
+      type: object
+      properties:
+        date:
+          type: string
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        station:
+          $ref: '#/components/schemas/StationForSchedule'
+        schedule:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScheduleItem'
+        schedule_direction:
+          $ref: '#/components/schemas/ScheduleDirection'
+        directions:
+          $ref: '#/components/schemas/Directions'
+            
+          
+        interval_segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/IntervalSegments'
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Segments'
+        search:
+            $ref: '#/components/schemas/SearchDetails'
     Stations:
       type: object
       properties:
@@ -198,7 +313,7 @@ components:
         from:
           $ref: '#/components/schemas/StationFromTo'
         thread:
-          $ref: '#/components/schemas/Thread'
+          $ref: '#/components/schemas/ThreadBetweenStations'
         departure_platform:
           type: string
         stops:
@@ -227,7 +342,7 @@ components:
         from:
           $ref: '#/components/schemas/StationFromTo'
         thread:
-          $ref: '#/components/schemas/Thread'
+          $ref: '#/components/schemas/ThreadBetweenStations'
         departure_platform:
           type: string
         departure:
@@ -259,7 +374,7 @@ components:
           $ref: '#/components/schemas/StationFromTo'
         date:
           type: string
-    Thread:
+    ThreadBetweenStations:
       type: object
       properties:
         uid:
@@ -276,6 +391,27 @@ components:
           type: string
         carrier:
           $ref: '#/components/schemas/Carrier'
+        transport_type:
+          type: string
+        vehicle:
+          type: string
+        transport_subtype:
+          $ref: '#/components/schemas/TransportSubtype'
+        express_type:
+          type: string
+    ThreadForSchedule:
+      type: object
+      properties:
+        uid:
+          type: string
+        title:
+          type: string
+        number:
+          type: string
+        short_title:
+          type: string
+        carrier:
+          $ref: '#/components/schemas/CarrierForSchedule'
         transport_type:
           type: string
         vehicle:
@@ -334,14 +470,23 @@ components:
         phone:
           type: string
         codes:
-          $ref: '#/components/schemas/Codes'
+          $ref: '#/components/schemas/CarrierCodes'
         address:
           type: string
         logo:
           type: string
         email:
           type: string
-    Codes:
+    CarrierForSchedule:
+      type: object
+      properties:
+        code:
+          type: number
+        title:
+          type: string
+        codes:
+          $ref: '#/components/schemas/CarrierCodes'
+    CarrierCodes:
       type: object
       properties:
         icao:
@@ -404,11 +549,74 @@ components:
         majority:
           type: integer
         type_choices:
-          $ref: '#/components/schemas/Schedule'
-    Schedule:
+          $ref: '#/components/schemas/ScheduleForNearestStations'
+    StationForSchedule:
+      type: object
+      properties:
+        code:
+          type: string
+        station_type:
+          type: string
+        station_type_name:
+          type: string
+        title:
+          type: string
+        popular_title:
+          type: string
+        short_title:
+          type: string
+        codes:
+          $ref: '#/components/schemas/StationCodes'
+        transport_type:
+          type: string
+        type:
+          type: string
+    ScheduleForNearestStations:
       type: object
       properties:
         desktop_url:
           type: string
         touch_url:
+          type: string
+    StationCodes:
+      type: object
+      properties:
+        yandex:
+          type: string
+        esr:
+          type: string
+    ScheduleItem:
+      type: object
+      properties:
+        except_days:
+          type: string
+        arrival:
+          type: string
+        thread:
+          $ref: '#/components/schemas/ThreadForSchedule'
+        is_fuzzy:
+          type: boolean
+        days:
+          type: string
+        stops:
+          type: string
+        departure:
+          type: string
+        terminal:
+          type: string
+        platform:
+          type: string
+    ScheduleDirection:
+      type: object
+      properties:
+        code:
+          type: string
+        title:
+          type: string
+    Directions:
+      type: object
+      properties:
+        code:
+          type: string
+        title:
           type: string

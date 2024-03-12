@@ -3,6 +3,7 @@ import OpenAPIURLSession
 
 typealias NearestStations = Components.Schemas.Stations
 typealias ScheduleBetweenStations = Components.Schemas.Search
+typealias ScheduleForStation = Components.Schemas.Schedule
 
 protocol NearestStationsServiceProtocol {
     func getNearestStations(lat: Double, lng: Double, distance: Int) async throws -> NearestStations
@@ -10,6 +11,10 @@ protocol NearestStationsServiceProtocol {
 
 protocol ScheduleBetweenStationsServiceProtocol {
     func getScheduleBetweenStations(from: String, to: String) async throws -> ScheduleBetweenStations
+}
+
+protocol ScheduleForStationServiceProtocol {
+    func getScheduleForStation(station: String) async throws -> ScheduleForStation
 }
 
 final class NearestStationsService: NearestStationsServiceProtocol {
@@ -50,3 +55,22 @@ final class ScheduleBetweenStationsService: ScheduleBetweenStationsServiceProtoc
         return try response.ok.body.json
     }
 }
+
+final class ScheduleForStationService: ScheduleForStationServiceProtocol {
+    private let client: Client
+    private let apikey: String
+    
+    init(client: Client, apikey: String) {
+        self.client = client
+        self.apikey = apikey
+    }
+    
+    func getScheduleForStation(station: String) async throws -> ScheduleForStation {
+        let response = try await client.schedule(query: .init(
+            apikey: apikey,
+            station: station
+        ))
+        return try response.ok.body.json
+    }
+}
+
