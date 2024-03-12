@@ -18,7 +18,7 @@ struct ContentView: View {
         }
         .padding()
         .onAppear {
-            stations()
+            scheduleBetweenStations()
         }
     }
     
@@ -57,4 +57,26 @@ func stations() {
     }
 }
 
+func scheduleBetweenStations() {
+    do {
+        let server = try Servers.server1()
+        
+        let client = Client(
+            serverURL: server,
+            transport: URLSessionTransport()
+        )
+        
+        let service = ScheduleBetweenStationsService(client: client, apikey: "4cb1fc8d-00eb-473c-a43a-6cf48561e21a")
+        
+        Task {
+            let schedule = try await service.getScheduleBetweenStations(
+                from: "c146",
+                to: "c213"
+            )
+            print(schedule)
+        }
+    } catch {
+        print(error)
+    }
+}
 
