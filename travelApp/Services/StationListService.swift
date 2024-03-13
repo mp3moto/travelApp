@@ -6,6 +6,7 @@ typealias ScheduleBetweenStations = Components.Schemas.Search
 typealias ScheduleForStation = Components.Schemas.Schedule
 typealias Thread = Components.Schemas.Thread
 typealias NearestSettlement = Components.Schemas.NearestSettlement
+typealias Carriers = Components.Schemas.Carriers
 
 protocol NearestStationsServiceProtocol {
     func getNearestStations(lat: Double, lng: Double, distance: Int) async throws -> NearestStations
@@ -25,6 +26,10 @@ protocol ThreadServiceProtocol {
 
 protocol NearestSettlementServiceProtocol {
     func getNearestSettlement(lat: Double, lng: Double) async throws -> NearestSettlement
+}
+
+protocol CarriersServiceProtocol {
+    func getCarriers(code: Int) async throws -> Carriers
 }
 
 final class NearestStationsService: NearestStationsServiceProtocol {
@@ -121,3 +126,23 @@ final class NearestSettlementService: NearestSettlementServiceProtocol {
         return try response.ok.body.json
     }
 }
+
+final class CarriersService: CarriersServiceProtocol {
+    private let client: Client
+    private let apikey: String
+    
+    init(client: Client, apikey: String) {
+        self.client = client
+        self.apikey = apikey
+    }
+    
+    func getCarriers(code: Int) async throws -> Carriers {
+        let response = try await client.carrier(query: .init(
+            apikey: apikey,
+            code: code
+        ))
+        return try response.ok.body.json
+    }
+    
+}
+

@@ -21,7 +21,8 @@ struct ContentView: View {
             //scheduleBetweenStations()
             //scheduleForStation(station: "s9606444")
             //getThread(uid: "7424x7426x7432_0_9606434_g24_4")
-            getNearestSettlement(lat: 54.917995, lng: 55.497075)
+            //getNearestSettlement(lat: 54.917995, lng: 55.497075)
+            getCarriers(code: 112)
         }
     }
     
@@ -137,6 +138,26 @@ func getNearestSettlement(lat: Double, lng: Double) {
         Task {
             let nearestSettlement = try await service.getNearestSettlement(lat: lat, lng: lng)
             print(nearestSettlement)
+        }
+    } catch {
+        print(error)
+    }
+}
+
+func getCarriers(code: Int) {
+    do {
+        let server = try Servers.server1()
+        
+        let client = Client(
+            serverURL: server,
+            transport: URLSessionTransport()
+        )
+        
+        let service = CarriersService(client: client, apikey: "4cb1fc8d-00eb-473c-a43a-6cf48561e21a")
+        
+        Task {
+            let carriers = try await service.getCarriers(code: code)
+            print(carriers)
         }
     } catch {
         print(error)
