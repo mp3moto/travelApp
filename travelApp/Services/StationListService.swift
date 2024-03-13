@@ -1,5 +1,6 @@
 import OpenAPIRuntime
 import OpenAPIURLSession
+import Foundation
 
 typealias NearestStations = Components.Schemas.Stations
 typealias ScheduleBetweenStations = Components.Schemas.Search
@@ -8,6 +9,7 @@ typealias Thread = Components.Schemas.Thread
 typealias NearestSettlement = Components.Schemas.NearestSettlement
 typealias Carriers = Components.Schemas.Carriers
 typealias Copyright = Components.Schemas.Copyright
+typealias AllStations = Components.Schemas.StationsList
 
 protocol NearestStationsServiceProtocol {
     func getNearestStations(lat: Double, lng: Double, distance: Int) async throws -> NearestStations
@@ -35,6 +37,10 @@ protocol CarriersServiceProtocol {
 
 protocol CopyrightServiceProtocol {
     func getCopyright() async throws -> Copyright
+}
+
+protocol AllStationsServiceProtocol {
+    func getAllStations() async throws -> AllStations
 }
 
 final class NearestStationsService: NearestStationsServiceProtocol {
@@ -165,6 +171,42 @@ final class CopyrightService: CopyrightServiceProtocol {
             apikey: apikey
         ))
         return try response.ok.body.json
+    }
+    
+}
+
+final class AllStationsService: AllStationsServiceProtocol {
+    private let client: Client
+    private let apikey: String
+    
+    init(client: Client, apikey: String) {
+        self.client = client
+        self.apikey = apikey
+    }
+    
+    func getAllStations() async throws -> AllStations {
+        let response = try await client.stations_list(query: .init(
+            apikey: apikey
+        ))
+        
+        var html: String
+        
+        try html = await String(collecting: response.ok.body.html, upTo: Int.max)
+        print(html.count)
+        let data = html.data(using: .utf8)
+        print(data?.count ?? -10)
+        let decoder = JSONDecoder()
+        do {
+            let json = try decoder.decode(AllStations.self, from: data!)
+        } catch {
+            print(error)
+        }
+        //print(json.countries?.count)
+        //return json
+        return try decoder.decode(AllStations.self, from: data!)
+        
+        
+        //return try response.ok.body.html
     }
     
 }

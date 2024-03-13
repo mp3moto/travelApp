@@ -419,6 +419,38 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Copyright'
+  /v3.0/stations_list/:
+    get:
+      tags:
+      - stations_list
+      summary: Список всех доступных станций
+      operationId: stations_list
+      parameters:
+      - name: apikey
+        in: query
+        description: API key
+        required: true
+        schema:
+          type: string
+      - name: format
+        in: query
+        description: json или xml
+        required: false
+        schema:
+          type: string
+      - name: lang
+        in: query
+        description: lang
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: success
+          content:
+            text/html:
+              schema:
+                $ref: '#/components/schemas/StationsList'
 components:
   schemas:
     Search:
@@ -749,6 +781,29 @@ components:
           type: string
         type:
           type: string
+    StationForAllStationsList:
+      type: object
+      properties:
+        direction:
+          type: string
+        station_type:
+          type: string
+        title:
+          type: string
+        codes:
+          $ref: '#/components/schemas/StationCodesForAllStationsList'
+        transport_type:
+          type: string
+        longitude:
+          oneOf:
+            - type: number
+            - type: string
+          nullable: true
+        latitude:
+          oneOf:
+            - type: number
+            - type: string
+          nullable: true
     ScheduleForNearestStations:
       type: object
       properties:
@@ -762,6 +817,13 @@ components:
         yandex:
           type: string
         esr:
+          type: string
+    StationCodesForAllStationsList:
+      type: object
+      properties:
+        yandex_code:
+          type: string
+        esr_code:
           type: string
     ScheduleItem:
       type: object
@@ -927,3 +989,46 @@ components:
           type: string
         logo_hm:
           type: string
+    StationsList:
+      type: object
+      properties:
+        countries:
+          type: array
+          items:
+            $ref: '#/components/schemas/Country'
+    Country:
+      type: object
+      properties:
+        regions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Regions'
+        codes:
+          $ref: '#/components/schemas/StationCodesForAllStationsList'
+        title:
+          type: string
+    Regions:
+      type: object
+      properties:
+        settlements:
+          type: array
+          items:
+            $ref: '#/components/schemas/Settlements'
+        codes:
+          $ref: '#/components/schemas/StationCodesForAllStationsList'
+        title:
+          type: string
+    Settlements:
+      type: object
+      properties:
+        stations:
+          type: array
+          items:
+            $ref: '#/components/schemas/StationForAllStationsList'
+        codes:
+          $ref: '#/components/schemas/StationCodesForAllStationsList'
+        title:
+          type: string
+
+
+    
