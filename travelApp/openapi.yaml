@@ -107,6 +107,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Search'
+        "404":
+          description: Pet not found
   /v3.0/schedule/:
     get:
       tags:

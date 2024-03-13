@@ -11,7 +11,9 @@
 		9447A74C2B9E3185006F412B /* OpenAPIURLSession in Frameworks */ = {isa = PBXBuildFile; productRef = 9447A74B2B9E3185006F412B /* OpenAPIURLSession */; };
 		9447A7502B9E321D006F412B /* openapi.yaml in Resources */ = {isa = PBXBuildFile; fileRef = 9447A74F2B9E321C006F412B /* openapi.yaml */; };
 		9447A7522B9E3534006F412B /* openapi-generator-config.yaml in Resources */ = {isa = PBXBuildFile; fileRef = 9447A7512B9E3534006F412B /* openapi-generator-config.yaml */; };
-		9447A7562B9E37A6006F412B /* StationListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9447A7552B9E37A6006F412B /* StationListService.swift */; };
+		9447A7562B9E37A6006F412B /* YandexScheduleService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9447A7552B9E37A6006F412B /* YandexScheduleService.swift */; };
+		9447A75A2BA21A17006F412B /* TransportScheduleDataProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9447A7592BA21A17006F412B /* TransportScheduleDataProviderProtocol.swift */; };
+		9447A75E2BA21A4D006F412B /* Typealiases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9447A75D2BA21A4D006F412B /* Typealiases.swift */; };
 		94D445EF2B93984400B0EE90 /* travelAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D445EE2B93984400B0EE90 /* travelAppApp.swift */; };
 		94D445F12B93984400B0EE90 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D445F02B93984400B0EE90 /* ContentView.swift */; };
 		94D445F32B93984600B0EE90 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94D445F22B93984600B0EE90 /* Assets.xcassets */; };
@@ -21,7 +23,9 @@
 /* Begin PBXFileReference section */
 		9447A74F2B9E321C006F412B /* openapi.yaml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = openapi.yaml; sourceTree = "<group>"; };
 		9447A7512B9E3534006F412B /* openapi-generator-config.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = "openapi-generator-config.yaml"; sourceTree = "<group>"; };
-		9447A7552B9E37A6006F412B /* StationListService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationListService.swift; sourceTree = "<group>"; };
+		9447A7552B9E37A6006F412B /* YandexScheduleService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YandexScheduleService.swift; sourceTree = "<group>"; };
+		9447A7592BA21A17006F412B /* TransportScheduleDataProviderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransportScheduleDataProviderProtocol.swift; sourceTree = "<group>"; };
+		9447A75D2BA21A4D006F412B /* Typealiases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typealiases.swift; sourceTree = "<group>"; };
 		94D445EB2B93984400B0EE90 /* travelApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = travelApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94D445EE2B93984400B0EE90 /* travelAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = travelAppApp.swift; sourceTree = "<group>"; };
 		94D445F02B93984400B0EE90 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -45,9 +49,25 @@
 		9447A7542B9E3658006F412B /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				9447A7552B9E37A6006F412B /* StationListService.swift */,
+				9447A7552B9E37A6006F412B /* YandexScheduleService.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		9447A7582BA21A08006F412B /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				9447A7592BA21A17006F412B /* TransportScheduleDataProviderProtocol.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		9447A75C2BA21A30006F412B /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				9447A75D2BA21A4D006F412B /* Typealiases.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 		94D445E22B93984400B0EE90 = {
@@ -69,6 +89,8 @@
 		94D445ED2B93984400B0EE90 /* travelApp */ = {
 			isa = PBXGroup;
 			children = (
+				9447A75C2BA21A30006F412B /* Helpers */,
+				9447A7582BA21A08006F412B /* Protocols */,
 				9447A7542B9E3658006F412B /* Services */,
 				9447A74F2B9E321C006F412B /* openapi.yaml */,
 				94D445EE2B93984400B0EE90 /* travelAppApp.swift */,
@@ -170,9 +192,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9447A7562B9E37A6006F412B /* StationListService.swift in Sources */,
+				9447A7562B9E37A6006F412B /* YandexScheduleService.swift in Sources */,
 				94D445F12B93984400B0EE90 /* ContentView.swift in Sources */,
+				9447A75E2BA21A4D006F412B /* Typealiases.swift in Sources */,
 				94D445EF2B93984400B0EE90 /* travelAppApp.swift in Sources */,
+				9447A75A2BA21A17006F412B /* TransportScheduleDataProviderProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
