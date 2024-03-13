@@ -22,7 +22,8 @@ struct ContentView: View {
             //scheduleForStation(station: "s9606444")
             //getThread(uid: "7424x7426x7432_0_9606434_g24_4")
             //getNearestSettlement(lat: 54.917995, lng: 55.497075)
-            getCarriers(code: 112)
+            //getCarriers(code: 112)
+            getCopyright()
         }
     }
     
@@ -158,6 +159,26 @@ func getCarriers(code: Int) {
         Task {
             let carriers = try await service.getCarriers(code: code)
             print(carriers)
+        }
+    } catch {
+        print(error)
+    }
+}
+
+func getCopyright() {
+    do {
+        let server = try Servers.server1()
+        
+        let client = Client(
+            serverURL: server,
+            transport: URLSessionTransport()
+        )
+        
+        let service = CopyrightService(client: client, apikey: "4cb1fc8d-00eb-473c-a43a-6cf48561e21a")
+        
+        Task {
+            let copyright = try await service.getCopyright()
+            print(copyright)
         }
     } catch {
         print(error)

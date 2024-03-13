@@ -7,6 +7,7 @@ typealias ScheduleForStation = Components.Schemas.Schedule
 typealias Thread = Components.Schemas.Thread
 typealias NearestSettlement = Components.Schemas.NearestSettlement
 typealias Carriers = Components.Schemas.Carriers
+typealias Copyright = Components.Schemas.Copyright
 
 protocol NearestStationsServiceProtocol {
     func getNearestStations(lat: Double, lng: Double, distance: Int) async throws -> NearestStations
@@ -30,6 +31,10 @@ protocol NearestSettlementServiceProtocol {
 
 protocol CarriersServiceProtocol {
     func getCarriers(code: Int) async throws -> Carriers
+}
+
+protocol CopyrightServiceProtocol {
+    func getCopyright() async throws -> Copyright
 }
 
 final class NearestStationsService: NearestStationsServiceProtocol {
@@ -146,3 +151,20 @@ final class CarriersService: CarriersServiceProtocol {
     
 }
 
+final class CopyrightService: CopyrightServiceProtocol {
+    private let client: Client
+    private let apikey: String
+    
+    init(client: Client, apikey: String) {
+        self.client = client
+        self.apikey = apikey
+    }
+    
+    func getCopyright() async throws -> Copyright {
+        let response = try await client.copyright(query: .init(
+            apikey: apikey
+        ))
+        return try response.ok.body.json
+    }
+    
+}
